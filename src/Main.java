@@ -5,24 +5,29 @@ public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
-        handleException(()-> {
-            System.out.print("첫 번째 숫자를 입력하세요: ");
-            long first = sc.nextLong();
+        while (true) {
+            handleException(()-> {
+                System.out.print("첫 번째 숫자를 입력하세요: ");
+                long first = sc.nextLong();
 
-            System.out.print("두 번째 숫자를 입력하세요: ");
-            long second = sc.nextLong();
+                System.out.print("두 번째 숫자를 입력하세요: ");
+                long second = sc.nextLong();
 
-            System.out.print("사칙연산 기호를 입력하세요: ");
-            char operator = sc.next().charAt(0);
+                System.out.print("사칙연산 기호를 입력하세요: ");
+                char operator = sc.next().charAt(0);
 
-            double result = operate(first, second, operator);
+                double result = operate(first, second, operator);
 
-            if (result % 1 == 0) {
-                System.out.println("결과 : " + (long) result);
-            } else {
-                System.out.println("결과 : " + result);
-            }
-        }, sc);
+                if (result % 1 == 0) {
+                    System.out.println("결과 : " + (long) result);
+                } else {
+                    System.out.println("결과 : " + result);
+                }
+            }, sc);
+
+            System.out.println("더 계산하시겠습니까? (exit 입력 시 종료)");
+            if (sc.nextLine().equals("exit")) return;
+        }
     }
 
     private static double operate(long a, long b, char operator) {
@@ -52,11 +57,12 @@ public class Main {
             logic.run();
         } catch (InputMismatchException e) {    // scanner 관련 예외 : 피연산자 타입 및 범위 체크
             System.out.println("피연산자가 올바르지 않습니다.");
-            sc.nextLine();  // 예외 시 버퍼에 남아있는 데이터 제거
         } catch (ArithmeticException e) {
             System.out.println("연산 중 오버/언더플로우 발생");
         } catch (IllegalArgumentException e) {  // 그 외 입력 예외 커스텀 예외 대신 메시지 출력
             System.out.println(e.getMessage());
+        } finally {
+            sc.nextLine();
         }
     }
 }
