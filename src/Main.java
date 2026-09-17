@@ -1,5 +1,7 @@
-import java.util.InputMismatchException;
 import java.util.Scanner;
+
+import static exception.ExceptionHandler.handleException;
+import static exception.ExceptionMessage.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -8,13 +10,13 @@ public class Main {
         while (true) {
             handleException(()-> {
                 System.out.print("첫 번째 숫자를 입력하세요: ");
-                long first = sc.nextLong();
+                long first = InputValidator.numDefaultValidate(sc.nextLine());
 
                 System.out.print("두 번째 숫자를 입력하세요: ");
-                long second = sc.nextLong();
+                long second = InputValidator.numDefaultValidate(sc.nextLine());
 
                 System.out.print("사칙연산 기호를 입력하세요: ");
-                char operator = sc.next().charAt(0);
+                char operator = InputValidator.inputCountCheck(sc.nextLine()).charAt(0);
 
                 double result = operate(first, second, operator);
 
@@ -23,46 +25,41 @@ public class Main {
                 } else {
                     System.out.println("결과 : " + result);
                 }
-            }, sc);
+            });
 
             System.out.println("더 계산하시겠습니까? (exit 입력 시 종료)");
             if (sc.nextLine().equals("exit")) return;
         }
     }
 
+    // 이후 STEP3에서 리팩토링
     private static double operate(long a, long b, char operator) {
-        // 오버/언더 플로우 예외 발생
-        return switch (operator) {
-            case '+' -> Math.addExact(a, b);
-            case '-' -> Math.subtractExact(a, b);
-            case '*' -> Math.multiplyExact(a, b);
-            case '/' -> division(a, b);
-            default -> throw new IllegalArgumentException("잘못된 연산자를 입력했습니다.");
-        };
+
+        try {
+            return switch (operator) {
+                case '+' -> Math.addExact(a, b);
+                case '-' -> Math.subtractExact(a, b);
+                case '*' -> Math.multiplyExact(a, b);
+                case '/' -> division(a, b);
+                default -> throw new IllegalArgumentException(INPUT_INVALID_OPERATOR);
+            };
+        }   // Math 오버플로우 예외 번역
+        catch (ArithmeticException e) {
+            if (e.getMessage().equals(CALCULATOR_DIVIDE_ZERO)) {
+                throw e;
+            }
+            throw new ArithmeticException(CALCULATOR_OUT_OF_RANGE);
+        }
     }
 
     // 나눗셈 예외 처리로 인한 분리
     private static double division(long a, long b) {
         // 0으로 나누는 경우 예외 발생
-        if (b == 0) throw new IllegalArgumentException("0으로 나눌 수 없습니다.");
+        if (b == 0) throw new ArithmeticException(CALCULATOR_DIVIDE_ZERO);
 
         // 오버플로우 예외 발생 (17에는 Math.devideExact 존재 X)
         if (a == Long.MIN_VALUE && b == -1) throw new ArithmeticException();
 
         return (double)a / b;
-    }
-
-    private static void handleException(Runnable logic, Scanner sc) {
-        try {
-            logic.run();
-        } catch (InputMismatchException e) {    // scanner 관련 예외 : 피연산자 타입 및 범위 체크
-            System.out.println("피연산자가 올바르지 않습니다.");
-        } catch (ArithmeticException e) {
-            System.out.println("연산 중 오버/언더플로우 발생");
-        } catch (IllegalArgumentException e) {  // 그 외 입력 예외 커스텀 예외 대신 메시지 출력
-            System.out.println(e.getMessage());
-        } finally {
-            sc.nextLine();
-        }
     }
 }
