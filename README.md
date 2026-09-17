@@ -8,14 +8,14 @@ ___
 
 요구사항 분석을 통해 사칙 연산 및 예외 처리 등의 주요 기능들을 구현합니다.
 <br>
-현재 STEP1 <클래스 없이 기본적인 연산 구현하기>입니다.
+경현재 STEP2 <클래스 적용해 계산기 만들기>입니다.
 
 각 STEP별로 릴리즈 노트 발행할 예정입니다.
 
 ## 👨‍💻개발 기간 및 기술 스택
 ___
 ### 개발 기간
-- 2026.09.16일
+- 2026.09.17일 ~
 
 ### 기술 스택
 - JDK 17
@@ -28,8 +28,8 @@ ___
 - **기본 연산** : 정수의 덧셈, 뺄셈, 곱셈, 나눗셈 수행
 
 ### 2. 입력 및 예외처리
-- **2개의 정수** [입력] : 타입 및 범위 체크
-- **1개의 연산자** [입력] : 문자(+, -, *, /, %) 체크
+- **2개의 정수** [입력] : 타입 및 범위, 개수 체크
+- **1개의 연산자** [입력] : 문자(+, -, *, /, %), 개수 체크
 - **연산 오버플로우** : 각 연산 간 오버플로우 여부 체크
 - **N/0 체크**
 - **Scanner 버퍼 체크**
@@ -72,6 +72,15 @@ ___
 │   ├── screenshot_fail.png
 │   └── screenshot_success.png
 ├── src/
+│   ├── calculator/
+│   │   ├── BasicCalculator.java
+│   │   ├── CalculateResult.java
+│   │   └── Calculator.java
+│   ├── exception/
+│   │   ├── ExceptionHandler.java
+│   │   └── ExceptionMessage.java
+│   ├── valid/
+│   │   └── InputValidator.java
 │   └── Main.java
 ├── .gitignore
 └── README.md
