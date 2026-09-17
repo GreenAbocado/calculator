@@ -8,7 +8,9 @@ public class ExceptionMessage {
     public static final String INPUT_OUT_OF_RANGE = "입력 값이 범위를 초과합니다.";
 
     public static final String CALCULATOR_DIVIDE_ZERO = "0으로 나눌 수 없습니다.";
-    public static final String CALCULATOR_OUT_OF_RANGE = "계산 중 언더/오버플로우가 발생했습니다";
+    public static final String CALCULATOR_DIVIDE_OVERFLOW = "최소값과 -1은 나눌 수 없습니다.";
+
+    public static final String STORE_IS_EMPTY = "결과 저장소가 비어있습니다";
 
     // 외부 객체 생성 방지
     private ExceptionMessage() {}

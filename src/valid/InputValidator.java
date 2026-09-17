@@ -1,3 +1,5 @@
+package valid;
+
 import static exception.ExceptionMessage.*;
 
 public class InputValidator {
@@ -7,7 +9,7 @@ public class InputValidator {
         String trimStr = inputCountCheck(num);
 
         // 숫자가 아닌 다른 문자가 껴있는 경우
-        if (!trimStr.matches("[0-9]+")) {
+        if (!trimStr.matches("-?[0-9]+")) {
             throw new IllegalArgumentException(INPUT_TYPE_NOT_MATCH);
         }
 
