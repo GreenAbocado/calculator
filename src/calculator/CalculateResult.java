@@ -20,6 +20,6 @@ public class CalculateResult {
     @Override
     public String toString() {
         // 자바가 문자열 연산 최적화
-        return firstNum + " " + operator + " " + secondNum + " = " + result;
+        return "(" + firstNum + operator + secondNum + " = " + result + ")";
     }
 }
