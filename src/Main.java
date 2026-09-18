@@ -1,35 +1,52 @@
-import calculator.BasicCalculator;
-import calculator.Calculator;
+import calculator.ArithmeticCalculator;
+import calculator.CalculateResult;
+import calculator.Operator;
+import io.InputValidator;
+import io.MenuOption;
+import java.util.List;
 import java.util.Scanner;
-
 import static exception.ExceptionHandler.handleException;
-import static valid.InputValidator.*;
+import static io.InputValidator.parseMenuOption;
+import static io.OutputMessage.*;
 
 public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        Calculator calculator = new BasicCalculator();
+        ArithmeticCalculator calculator = new ArithmeticCalculator();
+
 
         while (true) {
-            handleException(()-> {
-                System.out.print("첫 번째 숫자를 입력하세요: ");
-                long first = numDefaultValidate(sc.nextLine());
+            System.out.print(MENU);
 
-                System.out.print("두 번째 숫자를 입력하세요: ");
-                long second = numDefaultValidate(sc.nextLine());
-
-                System.out.print("사칙연산 기호를 입력하세요: ");
-                char operator = inputCountCheck(sc.nextLine()).charAt(0);
-
-                double result = calculator.calculate(first, second, operator);
-
-                System.out.println(result % 1 == 0 ? String.valueOf((long)result) : String.valueOf(result));
+            handleException(() -> {
+                MenuOption option = parseMenuOption(sc.nextLine());
+                switch (option) {
+                    case CALCULATE -> System.out.printf(RESULT_FORMAT, calculate(sc, calculator));
+                    case FIND_ALL -> System.out.println(calculator.findAllResult());
+                    case REMOVE_OLDER -> calculator.removeOlder();
+                    case FIND_OVER -> System.out.println(findOverInput(sc, calculator));
+                    case EXIT -> System.exit(0);
+                }
             });
-
-            System.out.println("더 계산하시겠습니까? (exit 입력 시 종료)");
-            if (sc.nextLine().equals("exit")) {
-                return;
-            }
         }
+    }
+
+    private static Number calculate(Scanner sc, ArithmeticCalculator calculator) {
+        System.out.print(INPUT_FIRST_NUM);
+        Number first = InputValidator.parseNum(sc.nextLine());
+
+        System.out.print(INPUT_SECOND_NUM);
+        Number second = InputValidator.parseNum(sc.nextLine());
+
+        System.out.print(INPUT_OPERATOR);
+        Operator operator = Operator.from(InputValidator.parseChar(sc.nextLine()));
+
+        return calculator.calculate(first, second, operator);
+    }
+
+    private static List<CalculateResult> findOverInput(Scanner sc, ArithmeticCalculator calculator) {
+        System.out.print(INPUT_TARGET_NUM);
+        Number num = InputValidator.parseNum(sc.nextLine());
+        return calculator.findOverInput(num);
     }
 }
